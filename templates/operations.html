@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Overview</title>
+    <style>
+        /* General Reset */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto", Arial, sans-serif;
+    background-color: #12161c;
+    color: #eaecef;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    background-color: #161a23;
+    text-align: center;
+    padding: 20px 0;
+    border-bottom: 2px solid #f0b90b;
+}
+
+h1 {
+    color: #f0b90b;
+    font-size: 2.8em;
+    margin: 0;
+}
+
+/* Main Section */
+main {
+    padding: 20px;
+}
+
+h2 {
+    color: #f0b90b;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+hr {
+    border: none;
+    border-top: 2px solid #2c303a;
+    margin: 15px 0;
+}
+
+p {
+    font-size: 1.2em;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+/* Data Box */
+.data-box {
+    background-color: #1e232a;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    overflow-x: auto; /* Ensures horizontal scrolling for wide content */
+    font-family: "Courier New", Courier, monospace;
+    color: #eaecef;
+    border: 1px solid #2c303a;
+    max-width: 100%; /* Ensures the box doesn't overflow the screen */
+    white-space: nowrap; /* Prevents line breaks in tabular data */
+}
+
+/* Style for Scrollbars */
+.data-box::-webkit-scrollbar {
+    height: 8px; /* Height of horizontal scrollbar */
+}
+
+.data-box::-webkit-scrollbar-thumb {
+    background: #f0b90b; /* Color of scrollbar thumb */
+    border-radius: 4px;
+}
+
+.data-box::-webkit-scrollbar-thumb:hover {
+    background: #d89d08; /* Darker thumb on hover */
+}
+
+.data-box::-webkit-scrollbar-track {
+    background: #2c303a; /* Track color */
+}
+
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #161a23;
+    border-top: 2px solid #f0b90b;
+    margin-top: 20px;
+}
+
+footer p {
+    margin: 0;
+    color: #eaecef;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.4em;
+    }
+
+    h2 {
+        font-size: 1.6em;
+    }
+
+    .data-box {
+        padding: 15px;
+    }
+
+    p {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.4em;
+    }
+
+    p {
+        font-size: 0.9em;
+    }
+
+    .data-box {
+        padding: 10px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Data Analysis Dashboard</h1>
+    </header>
+
+    <main>
+        <section class="data-section">
+            <h2>Data Overview</h2>
+            <hr>
+            <p>Head of the DataFrame (first 5 rows):</p>
+            <div class="data-box">{{ head | safe }}</div>
+
+            <p>Tail of the DataFrame (last 5 rows):</p>
+            <div class="data-box">{{ tail | safe }}</div>
+        </section>
+
+        <section class="summary-section">
+            <h2>Summary</h2>
+            <hr>
+            <div class="data-box">{{ summary | safe }}</div>
+        </section>
+
+        <section class="info-section">
+            <h2>Info</h2>
+            <hr>
+            <pre>{{ info }}</pre>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Data Analytics Inc. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Success</title>
+    <style>
+        /* General Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Roboto", Arial, sans-serif;
+            background-color: #12161c;
+            color: #eaecef;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #eaecef;
+        }
+
+        .file-name {
+            color: #f0b90b;
+        }
+
+        /* Main Section */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .continue-form, .upload-form {
+            text-align: center;
+        }
+
+        button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #12161c;
+    background-color: #f0b90b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #d89d08;
+}
+
+.upload-another {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.upload-another a {
+    font-size: 1em;
+    color: #eaecef;
+    text-decoration: none;
+    
+    transition: color 0.3s ease;
+}
+
+.upload-another a:hover {
+    color: #d89d08;
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h2>File <span class="file-name">{{fileName}}</span> uploaded successfully!</h2>
+    </header>
+    <main>
+        <form action="/operations" class="continue-form">
+            <button type="submit">Continue</button>
+        </form>
+        <p class="upload-another">
+            <a href="/">Upload Another File</a>
+        </p>
+    </main>
+    
+    
+    <footer>
+        <p>&copy; 2025 File Manager. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
+
