@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processed Data Overview</title>
+    <style>
+        /* General Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Roboto", Arial, sans-serif;
+            background-color: #12161c;
+            color: #eaecef;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: #161a23;
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #f0b90b;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #f0b90b;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h2, h3, p {
+            color: #f0b90b;
+        }
+
+        .data-box {
+            background-color: #1e232a;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-family: "Courier New", Courier, monospace;
+            max-width: 90%;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            border: 1px solid #2c303a;
+            color: #f0f0f0;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Space between buttons */
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #12161c;
+            background-color: #f0b90b;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #d89d08;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #161a23;
+            border-top: 2px solid #f0b90b;
+            color: #eaecef;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .button-container {
+                flex-direction: column; /* Stack buttons vertically */
+                gap: 10px; /* Adjust gap for smaller screens */
+            }
+
+            button {
+                width: 100%; /* Make buttons fill the container width */
+                max-width: 300px;
+                margin: 0 auto; /* Center the buttons */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Processed Data Overview</h1>
+    </header>
+    <main>
+        <p>Null values removed (if any) and label encoding applied successfully.</p>
+
+        <h2>Encoded Data Frame</h2>
+        <div class="data-box">
+            {{ head | safe }}
+        </div>
+
+        <h2>Null Values Removed</h2>
+        <div class="data-box">
+            {{ nullValue | safe }}
+        </div>
+
+        <h3>Select Task Type:</h3>
+        <div class="button-container">
+            <a href="/under_construction"><button>Regression</button></a>
+            <a href="/under_construction"><button>Classification</button></a>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Data Processing Dashboard. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
