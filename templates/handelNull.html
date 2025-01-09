@@ -61,10 +61,21 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            max-width: 100%;
+            white-space: normal; /* Allows text to wrap within the button */
+            word-wrap: break-word;
         }
 
         input[type="submit"]:hover {
             background-color: #d89d08;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            input[type="submit"] {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
         }
 
         /* Footer */
@@ -86,7 +97,7 @@
             {{ nullvalue | safe }}
         </div>
         <form action="/nullvalue" method="post">
-            <input type="submit" value="Remove Null Values and Apply Label Encoding">
+            <input type="submit" value="Clean Data & Encode">
         </form>
     </main>
     <footer>
