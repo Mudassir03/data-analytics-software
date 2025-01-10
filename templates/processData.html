@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Data</title>
+    <style>
+        /* General Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Roboto", Arial, sans-serif;
+            background-color: #12161c;
+            color: #eaecef;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: #161a23;
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #f0b90b;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #f0b90b;
+        }
+
+        /* Main Section */
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        h3 {
+            color: #f0b90b;
+            font-size: 1.6em;
+            margin-bottom: 15px;
+        }
+
+        /* Select Dropdown */
+        select {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            border: 1px solid #2c303a;
+            border-radius: 5px;
+            background-color: #1e232a;
+            color: #eaecef;
+            font-size: 1em;
+        }
+
+        select option {
+            background-color: #1e232a;
+        }
+
+        /* Button Styles */
+        button {
+            margin: 10px 5px;
+            padding: 12px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #12161c;
+            background-color: #f0b90b;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #d89d08;
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .center-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Data Preview */
+        .data-preview {
+            margin: 20px 0;
+        }
+
+        .data-preview h4 {
+            color: #f0b90b;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .data-box {
+            background-color: #1e232a;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: "Courier New", Courier, monospace;
+            max-width: 100%;
+            white-space: pre-wrap;
+            border: 1px solid #2c303a;
+            color: #f0f0f0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #161a23;
+            border-top: 2px solid #f0b90b;
+            color: #eaecef;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            button {
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            select {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Process Data</h1>
+    </header>
+    
+    <main>
+        <form action="/processData" method="post">
+            <h3>Select Columns to Remove:</h3>
+            <select name="columnNames" id="columnSelect" multiple>
+                {% for column in columnNames %}
+                    <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            
+            <div class="button-container">
+                <button type="submit" name="remove_column">Remove Columns</button>
+                <button type="submit" name="label_encode">Label Encode</button>
+            </div>
+        </form>
+        
+        <div class="data-preview">
+            <h4>Data Head:</h4>
+            <div class="data-box">{{ head | safe }}</div>
+        </div>
+        
+        <div class="data-preview">
+            <h4>Null Value Count:</h4>
+            <div class="data-box">{{ nullValue | safe }}</div>
+            <form action="/processData" method="post">
+                <button type="submit" name="remove_null">Remove Nulls</button>
+            </form>
+        </div>
+        
+        <div class="center-button">
+            <form action="/task" method="get">
+                <button type="submit">Continue</button>
+            </form>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Data Cleaner Inc. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
