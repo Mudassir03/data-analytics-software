@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification Results</title>
+    <style>
+        /* General Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Roboto", Arial, sans-serif;
+            background-color: #12161c;
+            color: #eaecef;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: #161a23;
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #f0b90b;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #f0b90b;
+        }
+
+        /* Main Section */
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .results {
+            background-color: #1e232a;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #2c303a;
+        }
+
+        .results h2 {
+            color: #f0b90b;
+            margin-bottom: 20px;
+        }
+
+        .results p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .results span {
+            font-weight: bold;
+            color: #f0b90b; /* Consistent highlight color */
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #161a23;
+            border-top: 2px solid #f0b90b;
+            color: #eaecef;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .results {
+                padding: 15px;
+            }
+
+            .results p {
+                font-size: 1em;
+            }
+        }
+    </style>
+    <script>
+        function confirmAction(message) {
+            return confirm(message);
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Classification Results</h1>
+    </header>
+    
+    <main>
+        <div class="results">
+            <h2>Best Classification Model: <span>{{ model_name }}</span></h2>
+            <p>Accuracy: <span>{{ accuracy }}</span></p>
+            <p>Precision: <span>{{ precision }}</span></p>
+            <p>Recall: <span>{{ recall }}</span></p>
+            <p>F1 Score: <span>{{ f1_score }}</span></p>
+            <p>Best Hyperparameters: <span>{{ best_hyperparameters }}</span></p>
+        </div>
+    </main>
+    <form action="/processData"><button type="submit" name="clear_session" onclick="return confirmAction('Are you sure you want to clear the session?')">Clear Session</button></form>
+    
+    <footer>
+        <p>&copy; 2025 Data Cleaner Inc. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

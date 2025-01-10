@@ -136,6 +136,11 @@
             }
         }
     </style>
+    <script>
+        function confirmAction(message) {
+            return confirm(message);
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -154,6 +159,10 @@
             <div class="button-container">
                 <button type="submit" name="remove_column">Remove Columns</button>
                 <button type="submit" name="label_encode">Label Encode</button>
+                <button style="background-color: red; color: #eaecef;"
+                 type="submit" name="reset" onclick="return confirmAction('Are you sure you want to reset the data?')">Reset</button> 
+                <button style="background-color: rgb(191, 191, 191); color: #ff0202;"
+                 type="submit" name="clear_session" onclick="return confirmAction('Are you sure you want to clear the session?')">Clear Session</button><!-- Reset Button -->
             </div>
         </form>
         

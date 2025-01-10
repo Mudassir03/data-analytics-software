@@ -1,10 +1,28 @@
 from flask import Flask,session ,render_template, request, redirect, url_for
 from flask_session import Session
 import pandas as pd
+import numpy as np
 from sklearn.preprocessing import LabelEncoder
 import io
 import os
 import seaborn as sb
+
+
+
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.svm import SVR
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error, r2_score, accuracy_score, precision_score, recall_score, f1_score
+
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.tree import DecisionTreeClassifier
+
+
+
 
 
 
@@ -25,6 +43,135 @@ def label_encode_categorical_columns(df):
         df[column] = le.fit_transform(df[column])
         label_encoders[column] = le
     return df
+
+
+#regression model selection
+
+def best_regression_model_with_grid_search(X, y):
+    """
+    Perform grid search to tune hyperparameters for multiple regression models 
+    and return the best model based on R^2 score.
+
+    Parameters:
+    X (DataFrame or ndarray): The feature matrix.
+    y (Series or ndarray): The target variable.
+
+    Returns:
+    dict: Best model, R^2 score, and other metrics.
+    """
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    models = {
+        'Linear Regression': LinearRegression(),
+        'Ridge Regression': Ridge(),
+        'Lasso Regression': Lasso(),
+        'Support Vector Regressor': SVR(),
+        'Random Forest Regressor': RandomForestRegressor(),
+        'Gradient Boosting Regressor': GradientBoostingRegressor()
+    }
+
+    param_grids = {
+        'Linear Regression': {},
+        'Ridge Regression': {'alpha': [0.1, 1, 10, 100]},
+        'Lasso Regression': {'alpha': [0.1, 1, 10, 100]},
+        'Support Vector Regressor': {'C': [0.1, 1, 10], 'kernel': ['linear', 'rbf'], 'gamma': ['scale', 'auto']},
+        'Random Forest Regressor': {'n_estimators': [50, 100, 200], 'max_depth': [None, 10, 20]},
+        'Gradient Boosting Regressor': {'n_estimators': [50, 100], 'learning_rate': [0.01, 0.1], 'max_depth': [3, 5, 7]}
+    }
+
+    results = {}
+
+    for model_name, model in models.items():
+        grid_search = GridSearchCV(estimator=model, param_grid=param_grids[model_name], 
+                                   scoring='r2', cv=5, n_jobs=-1, verbose=1)
+        
+        grid_search.fit(X_train, y_train)
+        best_model = grid_search.best_estimator_
+        y_pred = best_model.predict(X_test)
+        
+        r2 = r2_score(y_test, y_pred)
+        mse = mean_squared_error(y_test, y_pred)
+        mae = np.mean(np.abs(y_test - y_pred))
+        
+        results[model_name] = {
+            'Model': best_model,
+            'Best Hyperparameters': grid_search.best_params_,
+            'R²': r2,
+            'MSE': mse,
+            'MAE': mae
+        }
+
+    best_model_name = max(results, key=lambda x: results[x]['R²'])
+    best_model = results[best_model_name]
+    
+    return best_model
+
+
+#classification model selection
+
+
+
+
+def best_classification_model_with_grid_search(X, y):
+    """
+    Perform grid search to tune hyperparameters for multiple classification models 
+    and return the best model based on accuracy score.
+
+    Parameters:
+    X (DataFrame or ndarray): The feature matrix.
+    y (Series or ndarray): The target variable.
+
+    Returns:
+    dict: Best model, accuracy score, and other metrics.
+    """
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+    models = {
+        'Logistic Regression': LogisticRegression(),
+        'Support Vector Classifier': SVC(),
+        'Decision Tree': DecisionTreeClassifier(),
+        'Random Forest': RandomForestClassifier(),
+        'Gradient Boosting Classifier': GradientBoostingClassifier()
+    }
+
+    param_grids = {
+        'Logistic Regression': {'C': [0.1, 1, 10], 'penalty': ['l1', 'l2'], 'solver': ['liblinear']},
+        'Support Vector Classifier': {'C': [0.1, 1, 10], 'kernel': ['linear', 'rbf'], 'gamma': ['scale', 'auto']},
+        'Decision Tree': {'max_depth': [None, 10, 20, 30], 'min_samples_split': [2, 5, 10]},
+        'Random Forest': {'n_estimators': [50, 100, 200], 'max_depth': [None, 10, 20], 'min_samples_split': [2, 5]},
+        'Gradient Boosting Classifier': {'n_estimators': [50, 100], 'learning_rate': [0.01, 0.1], 'max_depth': [3, 5, 7]}
+    }
+
+    results = {}
+
+    for model_name, model in models.items():
+        grid_search = GridSearchCV(estimator=model, param_grid=param_grids[model_name], 
+                                   scoring='accuracy', cv=5, n_jobs=-1, verbose=1)
+        
+        grid_search.fit(X_train, y_train)
+        best_model = grid_search.best_estimator_
+        y_pred = best_model.predict(X_test)
+        
+        acc = accuracy_score(y_test, y_pred)
+        precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+        recall = recall_score(y_test, y_pred, average='weighted')
+        f1 = f1_score(y_test, y_pred, average='weighted')
+        
+        results[model_name] = {
+            'Model': best_model,
+            'Best Hyperparameters': grid_search.best_params_,
+            'Accuracy': acc,
+            'Precision': precision,
+            'Recall': recall,
+            'F1 Score': f1
+        }
+
+    best_model_name = max(results, key=lambda x: results[x]['Accuracy'])
+    best_model = results[best_model_name]
+    
+    return best_model
+
+
 
 
 
@@ -98,13 +245,31 @@ def processData():
      # Use the latest modified DataFrame
 
     if request.method == 'POST':
+
+        if 'reset' in request.form:
+            # Clear the session of the processed DataFrame and reload the original file
+            session.pop('processed_df', None)
+            df = pd.read_csv(io.StringIO(uploaded_file_content))  # Reload the original DataFrame
+            nullValue = df.isnull().sum().to_frame(name='Null Count').to_html()
+            dfHead = df.head().to_html()
+            columnNames = list(df.columns)
+            # Re-render the page with the reset data
+            return render_template('processData.html', nullValue=nullValue, head=dfHead, columnNames=columnNames)
+        if 'clear_session' in request.form:
+            # Clear all session data
+            session.clear()  # This will clear all session variables
+            # Redirect to home page or upload page
+            return redirect(url_for('upload_file'))
         # Perform operations based on the button pressed
         if 'remove_null' in request.form:    
            df.dropna(inplace=True)  # Remove rows with null values
             
         if 'columnNames' in request.form:
             columns_to_remove = request.form.getlist('columnNames')  # Get selected columns
-            df.drop(columns=columns_to_remove, inplace=True, errors='ignore')  # Drop selected columns
+            if len(df.columns) - len(columns_to_remove) < 2:
+                return render_template('processData.html', error="Cannot remove columns. At least two columns must remain.", nullValue=df.isnull().sum().to_frame(name='Null Count').to_html(), head=df.head().to_html(), columnNames=df.columns.tolist())
+              # Drop selected columns
+            df.drop(columns=columns_to_remove, inplace=True, errors='ignore')
         if 'label_encode' in request.form:
             df = label_encode_categorical_columns(df)  # Apply label encoding to categorical columns
 
@@ -136,6 +301,81 @@ def task():
     dfHead = df.head().to_html()
 
     return render_template('task.html', nullValue=nullValue, head=dfHead)
+
+@app.route('/regression', methods=['GET', 'POST'])
+def regression():
+    if not session.get('processed_df'):
+        return render_template('error.html', message="No data available for regression!")
+
+    df = pd.read_csv(io.StringIO(session.get('processed_df')))
+    
+    if request.method == 'POST':
+        selected_columns = request.form.getlist('columnNames')
+        
+        if not selected_columns or len(selected_columns) != 1:
+            return render_template('error.html', message="Please select exactly one target variable!")
+        
+        y = df[selected_columns[0]]  # Dependent variable
+        X = df.drop(columns=selected_columns[0])  # Independent variables
+        
+        best_model_info = best_regression_model_with_grid_search(X, y)
+        
+        # Extract details
+        model_name = type(best_model_info['Model']).__name__
+        r2 = best_model_info['R²']
+        mse = best_model_info['MSE']
+        mae = best_model_info['MAE']
+        best_hyperparameters = best_model_info['Best Hyperparameters']
+        
+        return render_template(
+            'rfinalStage.html', 
+            model_name=model_name, r2=r2, mse=mse, mae=mae, best_hyperparameters=best_hyperparameters
+        )
+    else:
+        columnNames = list(df.columns)
+        return render_template('regression.html', columnNames=columnNames)
+    
+@app.route('/classification', methods=['GET', 'POST'])
+def classification():
+    if not session.get('processed_df'):
+        return render_template('error.html', message="No data available for classification!")
+
+    df = pd.read_csv(io.StringIO(session.get('processed_df')))
+
+    if request.method == 'POST':
+        selected_columns = request.form.getlist('columnNames')
+
+        if not selected_columns or len(selected_columns) != 1:
+            return render_template('error.html', message="Please select exactly one target variable!")
+
+        y = df[selected_columns[0]]  # Dependent variable
+        X = df.drop(columns=selected_columns[0])  # Independent variables
+
+        best_model_info = best_classification_model_with_grid_search(X, y)
+
+        # Extract details
+        model_name = type(best_model_info['Model']).__name__
+        accuracy = best_model_info['Accuracy']
+        precision = best_model_info['Precision']
+        recall = best_model_info['Recall']
+        f1_score = best_model_info['F1 Score']
+        best_hyperparameters = best_model_info['Best Hyperparameters']
+
+        return render_template(
+            'cfinalStage.html', 
+            model_name=model_name, 
+            accuracy=accuracy, 
+            precision=precision, 
+            recall=recall, 
+            f1_score=f1_score, 
+            best_hyperparameters=best_hyperparameters
+        )
+    else:
+        columnNames = list(df.columns)
+        return render_template('classification.html', columnNames=columnNames)
+
+
+
 
 @app.route('/under_construction')
 def under_construction():
