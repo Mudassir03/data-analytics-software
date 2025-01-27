@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invalid Dataset</title>
+    <style>
+        /* General Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Roboto", Arial, sans-serif;
+            background-color: #12161c;
+            color: #eaecef;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Message Box */
+        .message-box {
+            text-align: center;
+            background-color: #1e232a;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid #2c303a;
+        }
+
+        .message-box p {
+            font-size: 1.2em;
+            color: #f0b90b;
+            margin-bottom: 20px;
+        }
+
+        .message-box form {
+            margin-top: 10px;
+        }
+
+        .message-box button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #12161c;
+            background-color: #f0b90b;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .message-box button:hover {
+            background-color: #d89d08;
+        }
+    </style>
+</head>
+<body>
+    <div class="message-box">
+        <p>{{ message }}</p>
+        <form action="/processData" method="get">
+            <button type="submit">Go Back</button>
+        </form>
+    </div>
+</body>
+</html>

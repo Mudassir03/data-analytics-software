@@ -76,20 +76,35 @@
             background-color: #d89d08;
         }
 
-        /* Loading Animation */
-        #loading {
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
             display: none;
-            margin-top: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
         }
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(240, 185, 11, 0.2);
-            border-top: 4px solid #f0b90b;
+        .loading-overlay .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(240, 185, 11, 0.2);
+            border-top: 5px solid #f0b90b;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
+        }
+
+        .loading-overlay p {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #f0b90b;
+            text-align: center;
         }
 
         @keyframes spin {
@@ -116,11 +131,22 @@
                 width: 100%;
             }
         }
+        .email-link {
+            color: #f0b90b;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin-left: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .email-link:hover {
+            color: #d89d08;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Regression</h1>
+        <h1>Regression Task</h1>
     </header>
     
     <main>
@@ -133,28 +159,28 @@
             </select>
             <button type="submit">Submit</button>
         </form>
-        
-        <!-- Loading Animation -->
-        <div id="loading">
-            <div class="spinner"></div>
-            <p>Loading...</p>
-        </div>
     </main>
-    
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Please wait, this process may take some time. Do not leave the page.</p>
+    </div>
+
     <footer>
-        <p>&copy; 2025 Data Cleaner Inc. All Rights Reserved.</p>
+        <p>&copy; 2025 Design and Develope by MUDASSIR KHAN. 
+            <a href="mailto:khanmudassir.work@gmail.com" class="email-link">&#9993;</a>
+        </p>
     </footer>
 
     <script>
-        // Display loading animation on form submission
-        
+        // Show the loading overlay when the form is submitted
         const form = document.getElementById('regressionForm');
-        const loading = document.getElementById('loading');
+        const loadingOverlay = document.getElementById('loadingOverlay');
 
         form.addEventListener('submit', () => {
-            loading.style.display = 'block';
+            loadingOverlay.style.display = 'flex';
         });
-
     </script>
 </body>
 </html>

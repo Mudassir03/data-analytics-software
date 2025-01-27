@@ -83,7 +83,7 @@ def best_regression_model_with_grid_search(X, y):
 
     for model_name, model in models.items():
         grid_search = GridSearchCV(estimator=model, param_grid=param_grids[model_name], 
-                                   scoring='r2', cv=5, n_jobs=-1, verbose=1)
+                                   scoring='r2', cv=5, n_jobs=-1, verbose=2)
         
         grid_search.fit(X_train, y_train)
         best_model = grid_search.best_estimator_
@@ -146,7 +146,7 @@ def best_classification_model_with_grid_search(X, y):
 
     for model_name, model in models.items():
         grid_search = GridSearchCV(estimator=model, param_grid=param_grids[model_name], 
-                                   scoring='accuracy', cv=5, n_jobs=-1, verbose=1)
+                                   scoring='accuracy', cv=5, n_jobs=-1 , verbose=2)
         
         grid_search.fit(X_train, y_train)
         best_model = grid_search.best_estimator_
@@ -296,7 +296,26 @@ def processData():
 
 @app.route("/task")
 def task():
+
+    if not session.get('processed_df'):
+        if not  session.get('uploaded_file'):
+            return render_template('error.html', message="No uploaded file found in the session!")
+        else:
+           session['processed_df']= (session.get('uploaded_file'))
     df=pd.read_csv(io.StringIO(session.get('processed_df')))
+    
+
+    if (df.isnull().values.any()) or (len(df.select_dtypes(include=['object', 'category']).columns) > 0):
+        return render_template('baddata.html', message="The data contains missing values or categorical variables. Please preprocess the data before performing Machine Learning tasks.")
+
+
+    
+            
+
+    
+
+
+    
     nullValue = df.isnull().sum().to_frame(name='Null Count').to_html()
     dfHead = df.head().to_html()
 
@@ -373,6 +392,13 @@ def classification():
     else:
         columnNames = list(df.columns)
         return render_template('classification.html', columnNames=columnNames)
+    
+@app.route('/terminate')    
+def terminate():
+    return redirect(url_for('upload_file'))
+    # This will clear all session variables
+            # Redirect to home page or upload page
+            
 
 
 
@@ -384,6 +410,6 @@ def under_construction():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
-    #app.run(debug=True)
+    #port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0",port=8080)
+    app.run(debug=True)
